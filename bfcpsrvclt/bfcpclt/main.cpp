@@ -293,7 +293,7 @@ void menu(char *lineptr)
 				printf("Enter the desired transport for the BFCP messages\n\t(0 for TCP/BFCP, 1 for TCP/TLS/BFCP):\n");
 				error = scanf ("%i", &transport);
 				BFCP_CHECK_INTEGER;
-				list = bfcp_initialize_bfcp_participant(conferenceID, userID, text1, port_server, listen_server,context);
+				list = bfcp_initialize_bfcp_participant(conferenceID, userID, 3028,text1, port_server, listen_server,context);
 				if(list == NULL)
 					printf("Couldn't create the new BFCP participant...\n");
 				else
