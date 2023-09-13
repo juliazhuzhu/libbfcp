@@ -406,13 +406,26 @@ void keepalive_thread(void* bfcpal){
             case CONTENT_SENDING: {
 
                 //resend floorRequest every one second
+                if (now - bfcp->last_send_floorrequest_sec >= 1) {
+                    //bfcpal_send_message(bfcpal, FloorRequest,0);
+                    bfcp_floors_participant *floorIds = create_floor_list_p(bfcp->floorId, NULL);
+                    bfcp_floorRequest_participant(bfcp->bfcp_participant_list, 0, 0, floorIds, NULL,
+                                                  bfcp->bfcp_context,1);
+                    bfcp->content_dir = CONTENT_SENDING;
+                    bfcp->last_send_floorrequest_sec = now;
+                }
 
             }
             break;
 
             case CONTENT_STOPPING: {
                 //resend floorRelease every one second
-                //stopped after 5 time try
+                if (now - bfcp->last_send_floorrelease_sec >= 1) {
+                    unsigned short int floorRequestID = 1;
+                    bfcp_floorRelease_participant(bfcp->bfcp_participant_list, floorRequestID, bfcp->bfcp_context,1);
+                    bfcp->content_dir = CONTENT_STOPPING;
+                    bfcp->last_send_floorrelease_sec = now;
+                }
             }
             break;
 
